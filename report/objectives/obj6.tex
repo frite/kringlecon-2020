@@ -1,0 +1,53 @@
+\chapter{Objective 6}
+
+Our heroes enter the dark room.
+
+- IS THIS SOME KIND OF JOKE?
+
+No, it isn't Grinch. Grinch headed to the bottom and became Santa.
+
+- OMG, I need to find Cindy Lou and tell her. Cindy, I'm not Santa, I'm the Grinch. Someone used the portrait to become Santa. We need to get to the bottom of this.
+
+The Santa-Grinch headed to solve the Splunk challenge.
+
+\subsection{Splunk}
+\begin{itemize}
+\item If we run \begin{minted}{bash}
+index=*
+| stats values(Technique)
+\end{minted}
+we get back 14 results. Two are actually the same technique so the correct answer is 13.
+\item Based on the way the elf solved it
+\begin{minted}{bash}
+| tstats count where index=* by index
+| search index=T*-win OR T*-main
+| rex field=index "(?<technique>t\d+)[\.\-].0*"
+| stats dc(technique)
+\end{minted}
+we can deduce that the two indices we are looking for are T1059.003-main T1059.003-win. We can even verify that by setting them as indices for a search.
+\item If we search that \href{https://github.com/redcanaryco/atomic-red-team/}{repo} for MachineGUID we'll find \href{https://github.com/redcanaryco/atomic-red-team/blob/7ebf7536b886637d85388c93f34401d493cf4087/atomics/T1082/T1082.md#atomic-test-8---windows-machineguid-discovery}{this} which has the answer.
+The correct answer is
+\begin{minted}{bash}
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography.
+\end{minted}
+\item Again, we need to search that repo for OSTAP. If we run \begin{minted}{bash}
+index=attack technique_name="*OSTAP*"
+\end{minted}
+the oldest result was run in 2020-11-30T17:44:15Z.
+\item Searching the Atomic Red Team Repo yields no result. Instead if we google, we land on this \href{https://github.com/frgnca}{Github Profile}. This \href{https://github.com/frgnca/AudioDeviceCmdlets}{repo} has cdhunt as a contributor and he's a contributor to Atomic Red Team. CDHunt has WindowsAudioDevice as a repo in his Github profile. This should be the package we are looking for.
+Searching the repo, we can find all atomic tests that rely on this package. The only attack that seems to use this is T1123. Based on that, we can modify our Query like
+\begin{minted}{bash}
+index=T1123-win
+| CommandLine="*powershell.exe -Command WindowsAudioDevice-Powershell-Cmdlet*"
+\end{minted}
+and we get back one result. The Process ID is 3648.
+\item Again, we need to search the repo. If we search for .bat, remember it said it was used  by multiple files, we get back a link to https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/ARTifacts/Misc/Discovery.bat . The last command is quser.
+\item We already know that all T*-win indices contain Windows Event logs and all T*-main contain Bro logs. First, we need to find the DC. We need that machines are in the "attackrange.local" subdomain. Also, DCs, usually, contain the name "DC" in their Domain name. If we search for \begin{minted}{bash}
+index=T*-win host="*dc*"
+\end{minted}
+we can see that the domain controller is named "win-dc-748.attackrange.local". Based on the above, \begin{minted}{bash}
+index=T*-main certificate.subject="*win-dc-748.attackrange.local*"
+\end{minted}
+The SN is 55FCEEBB21270D9249E86F4B9DC7AA60/
+\item The last one is to decrypt 7FXjP1lyfKbyDK/MChyf36h7. Per the RFC that Alice is mentioning, it is using RC4. We can also get the key from the Splunk talk. The key is Stay Frosty and the decrypted result is The Lollipop Guild
+\end{itemize}

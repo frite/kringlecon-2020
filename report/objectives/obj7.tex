@@ -1,0 +1,104 @@
+\chapter{Objective 7}
+Given that Grinch was Santa, Cindy Lou already headed to the roof. There she found the \textit{yellow bulb}.
+
+\section{Netwars Challenges}
+Cindy Lou decided to go ahead and solve all challenges in the roof, because she was craving for some hints.
+
+\subsection{CAN-Bus Investigation}
+Cindy Lou rushed towards {\color{codegreen}Wunorse Openslae}. Grinch was actually working with cars so he was fairly familiar with CAN but Cindy had no idea.
+To balance that lack of knowledge, she decided to filter out every event that occurred multiple times. It was the natural thing to do, given that unlock must have occured only once.
+\begin{minted}{bash}
+elf@8a08020f4433:~$ cat candump.log | grep -v 244 | grep -v 188
+(1608926664.626448) vcan0 19B#000000000000
+(1608926671.122520) vcan0 19B#00000F000000
+(1608926674.092148) vcan0 19B#000000000000
+elf@8a08020f4433:~$ ./runtoanswer
+There are two LOCK codes and one UNLOCK code in the log.  What is the decimal portion of the UNLOCK timestamp?
+(e.g., if the timestamp of the UNLOCK were 1608926672.391456, you would enter 391456.
+> 122520
+Your answer: 122520
+
+Checking....
+Your answer is correct!
+
+elf@8a08020f4433:~$
+\end{minted}
+
+The elf asked Cindy for help. Turns out there's something strange with the brakes and something going on with the doors with Santa's sleight. Again, she wasn't allowed to help, but this time our heroes knew about the portrait.
+
+\subsection{Scappy Prepper}
+{\color{codegreen}Alabaster Snowball} is holding some Scapy workshop. While waiting for Grinch, she decided to give it a try.
+
+\begin{minted}{python}
+>>> task.get()
+<snip>
+>>> task.submit('start')
+<snip>
+>>> task.submit(sniff)
+<snip>
+>>> task.submit(1)
+<snip>
+>>> task.submit(rdpcap)
+<snip>
+>>> task.submit(2)
+<snip>
+>>> task.submit(UDP_PACKETS[0])
+<snip>
+>>> task.submit(TCP_PACKETS[1][TCP])
+<snip>
+>>> task.submit(UDP_PACKETS[0])
+<snip>
+>>> for packet in TCP_PACKETS:
+...     print (packet[TCP])
+<snip>
+PASS echo\r\n'
+<snip>
+>>> task.submit('echo')
+<snip>
+>>> task.submit(ICMP_PACKETS[1][ICMP].chksum)
+<snip>
+>>> task.submit(3)
+<snip>
+>>> pkt = IP(dst="127.127.127.127")/UDP(dport=5000)
+>>> task.submit(pkt)
+<snip>
+>>> task.submit(pkt)
+<snip>
+>>> ARP_PACKETS[0]
+<Ether  dst=ff:ff:ff:ff:ff:ff src=00:16:ce:6e:8b:24 type=ARP
+|<ARP  hwtype=0x1 ptype=IPv4 hwlen=6 plen=4 op=who-has
+hwsrc=00:16:ce:6e:8b:24 psrc=192.168.0.114 hwdst=00:00:00:00:00:00 pdst=192.168.0.1 |>>
+
+>>> ARP_PACKETS[1]
+<Ether  dst=00:16:ce:6e:8b:24 src=00:13:46:0b:22:ba type=ARP
+|<ARP  hwtype=0x1 ptype=IPv4 hwlen=6 plen=4 op=RARP-rep
+hwsrc=ff:ff:ff:ff:ff:ff psrc=192.168.0.1 hwdst=ff:ff:ff:ff:ff:ff pdst=192.168.0.114
+|<Padding  load='\xc0\xa8\x00r' |>>>
+
+>>> ARP_PACKETS[1][ARP].hwsrc='00:13:46:0b:22:ba'
+
+>>> ARP_PACKETS[1][ARP].hwdst='00:16:ce:6e:8b:24'
+
+>>> ARP_PACKETS[1].op=0x2
+>>> task.submit(ARP_PACKETS)
+Great, you prepared all the present packets!
+
+\end{minted}
+
+\subsection{On a more serious note}
+For whatever reason, people underestimate the power of Scapy. Scapy is extremely flexible. Things you can do with Scapy don't include simply juggling with packets. One could even build sensors off of scapy and deploy them across their network to sniff stuff.
+Apparently, mirroring traffic is rare those days. Anyway, you can literally do tons with Scapy. It's worth the time.
+
+\section {Solving CAN-D issues}
+This time, Cindy Lou became Santa, since she was already hanging around in the rooftop and held the hints given by the elves.
+
+She connected to the debugging status to see, but again it was a mess. Things were randomly flying through her screen. She fell back to her trusted tactic. Filter out all noise.
+Per her description, she started the engine and then blocked everything but ID 80. Then she messed with the brakes. Putting them on 5 she noticed that 080 was acting a bit strange. She took a note.
+Looking closer, she figured it out.
+The brakes were sending a random command.
+She should exclude everything from \textbf{ID 080 that contains FFFF}
+She went on to focus with the door lock/unlock issue. Following the samme approach, she noticed that the responsible ID was 19B.
+It would normally lock and unlock but at times it would send a command containing 0F2057.
+She excluded everything from \textbf{ID 19B that contains 0F2057}.
+
+And she got the objective.

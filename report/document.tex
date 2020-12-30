@@ -1,0 +1,166 @@
+
+\documentclass[12pt]{report}
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\usepackage{url, lipsum}
+\usepackage{tgbonum}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[default]{lato}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{multirow}
+\usepackage{minted}
+\usepackage{sidecap}
+
+
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{dkgreen}{rgb}{0,.6,0}
+\definecolor{dkblue}{rgb}{0,0,.6}
+\definecolor{dkyellow}{cmyk}{0,0,.8,.3}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+
+\graphicspath{ {imgs/} }
+
+
+\lstset {
+	breaklines=true,
+	upquote=true
+}
+
+\lstdefinestyle{PHP}{
+	language = php,
+	backgroundcolor=\color{backcolour},
+	basicstyle = \small\ttfamily,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny\color{mygray},
+	tabsize = 2,
+	upquote=true,
+	keywordstyle = \color{dkblue},
+	stringstyle = \color{red},
+	identifierstyle = \color{dkgreen},
+	commentstyle = \color{gray},
+	emph = [1]{php},
+	emphstyle = [1]\color{black},
+	emph = [2]{if,and,or,else},
+	emphstyle = [2]\color{dkyellow},
+	showspaces=false,
+	showstringspaces=false
+}
+
+\onehalfspacing
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+% set chapter format
+\titleformat{\chapter}[block]
+{\normalfont\huge\lato}{\thechapter}{1em}{\Huge}
+\titlespacing*{\chapter}{0pt}{-19pt}{0pt}
+
+% remove red boxes
+\hypersetup{%
+	pdfborder = {0 0 0}
+}
+
+% change the link style you can use
+\newcommand{\link}[1]{{\color{blue}\href{#1}{#1}}}
+
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\setlength\headheight{15pt}
+\fancyhead[L]{Whoville Pentesting Boutique}
+\fancyhead[R]{Grinch \& Cindy Lou Who}
+
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
+\title{Kringlecon 2020 Report}
+\author{Whoville Pentesting Boutique}
+
+\makeatletter
+\renewcommand{\maketitle}{
+	\begin{titlepage}
+		\begin{center}
+			\large
+			\vspace*{1cm}
+			{\LARGE\@title}
+			\par\vspace{1ex}
+			\begin{tabular}[t]{c}
+				by \@author
+			\end{tabular}
+			\vfill
+			\par\vspace{1ex}
+			December 2020
+		\end{center}
+		\@thanks
+	\end{titlepage}
+}
+\makeatother
+
+\begin{document}
+		\maketitle
+
+		\pagenumbering{gobble}
+		\tableofcontents
+		\newpage
+
+		\pagenumbering{arabic}
+		\input{introduction.tex}
+		\newpage
+
+		\input{objectives/obj1.tex}
+		\newpage
+
+    \input{objectives/obj2.tex}
+    \newpage
+
+    \input{objectives/obj3.tex}
+    \newpage
+
+    \input{objectives/obj4.tex}
+    \newpage
+
+    \input{objectives/obj5.tex}
+    \newpage
+
+    \input{objectives/obj6.tex}
+    \newpage
+
+    \input{objectives/obj7.tex}
+    \newpage
+
+    \input{objectives/obj8.tex}
+    \newpage
+
+    \input{objectives/obj9.tex}
+    \newpage
+
+    \input{objectives/obj10.tex}
+    \newpage
+
+    \input{objectives/obj11a.tex}
+    \newpage
+
+    \input{objectives/obj11b.tex}
+\end{document}

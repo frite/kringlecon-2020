@@ -1,0 +1,49 @@
+\chapter{Objective 11a}
+
+Grinch was swiftly booted out of Santa's office, so he returned back as Santa.
+{\color{codegreen}Tinsel Upatree} mentioned briefly that Jack Frost has probably changed his score.
+Grinch laughed, after all, they already had all the hints from solving that snowball machine thing.
+This couldn't be harder. His approach would be the same. Get all nonces, feed them into his generator until they become synced and spit the next number.
+He decided to verify the blockchain and print the nonces.
+
+\begin{minted}{python}
+with open('official_public.pem', 'rb') as fh:
+        official_public_key = RSA.importKey(fh.read())
+        c2 = Chain(load=True, filename='blockchain.dat')
+        print('C2: Block chain verify: %s' % (c2.verify_chain(official_public_key, previous_hash='c6e2e6ecb785e7132c8003ab5aaba88d')))
+        for block in c2.blocks:
+            print (block.nonce)
+\end{minted}
+
+Now that he had the nonces, it was time to solve the mystery.
+
+\begin{minted}{bash}
+$ pip install mersenne-twister-predictor
+$ cat solution.py
+import random
+
+from mt19937predictor import MT19937Predictor
+
+predictor = MT19937Predictor()
+nonces = [
+# THE NONCES HE DUMPED BEFORE
+]
+
+for i in range(624):
+    predictor.setrandbits(nonces[i], 64)
+
+while True:
+    r2 = predictor.getrandbits(64)
+    if r2 in nonces:
+        print ("Value %d found in %d" % (r2, nonces.index(r2)))
+    else:
+        print("Break")
+        break;
+
+for i in range(5):
+    print(hex(predictor.getrandbits(64)))
+$ python solution.py
+<snip>
+\end{minted}
+
+The answer was 57066318f32f729d. Grinch smiled.

